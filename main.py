@@ -86,7 +86,7 @@ async def get_similar_chunks(file_id: int, question: str, db: Session):
         response = client.embeddings.create(input=question, model="text-embedding-ada-002")
         question_embedding = response.data[0].embedding
 
-        similar_chunks_query = select(FileChunk).where(FileChunk.file_id == file_id)\ \
+        similar_chunks_query = select(FileChunk).where(FileChunk.file_id == file_id)\
                 .order_by(FileChunk.embedding_vector.l2_distance(question_embedding)).limit(10)
         similar_chunks = db.scalars(similar_chunks_query).all()
 
